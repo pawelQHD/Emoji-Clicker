@@ -20,56 +20,66 @@ const cardCrying = document.getElementById('card_crying');
 const btnBuyCrying = document.getElementById('btn_buy_crying');
 
 let score = 0;
-let totalEmojisGenerated = 0; // NEW: Tracks every single emoji clicked
+let totalEmojisGenerated = 0;
 let emojiPower = 1;
 
 // --- Function: Update UI Logic ---
 function updateGame() {
-    // 1. Update the score number on the screen
     countDisplay.innerText = score;
 
-    // 2. Starter Card (Visible: Always | Locked: Score < 9)
-    if (score >= 9) {
-        cardStarter.classList.remove('locked_card');
-        btnBuyStarter.disabled = false;
-    } else {
-        cardStarter.classList.add('locked_card');
-        btnBuyStarter.disabled = true;
+    // Update all cards using the helper function
+    updateCardDisplay(cardStarter, btnBuyStarter, 0);    // Always visible
+    updateCardDisplay(cardLaugher, btnBuyLaugher, 100);    // Reveal at 100
+    updateCardDisplay(cardCrying, btnBuyCrying, 2000);      // Reveal at 2000
+}
+
+/**
+ * Helper function to handle the 3-step reveal logic
+ * This ensures the "Locked" state always takes priority over "Revealed"
+ */
+function updateCardDisplay(card, btn, target) {
+    // --- STEP 1: VISIBILITY LOGIC ---
+    if (totalEmojisGenerated < (target / 2)) {
+        // State: Hidden
+        card.classList.add('hidden');
+        card.classList.remove('outline-mode', 'revealed-mode');
+    } 
+    else if (totalEmojisGenerated < target) {
+        // State: Outline (Ghost Emoji only)
+        card.classList.remove('hidden');
+        card.classList.add('outline-mode');
+        card.classList.remove('revealed-mode');
+    } 
+    else {
+        // State: Revealed (Full Color)
+        card.classList.remove('hidden');
+        card.classList.add('revealed-mode');
+        card.classList.remove('outline-mode');
     }
 
-    // 3. Laugher Card (Visible: Total >= 100 | Locked: Score < 163)
-    if (totalEmojisGenerated >= 100) {
-        cardLaugher.classList.remove('hidden'); // Show the card
-        if (score >= 163) {
-            cardLaugher.classList.remove('locked_card');
-            btnBuyLaugher.disabled = false;
-        } else {
-            cardLaugher.classList.add('locked_card');
-            btnBuyLaugher.disabled = true;
-        }
-    } else {
-        cardLaugher.classList.add('hidden'); // Hide the card
-    }
+    // --- STEP 2: AFFORDABILITY LOGIC ---
+    // This logic runs AFTER visibility. It will overwrite the appearance 
+    // if you don't have enough score.
+    
+    // Determine cost based on which button we are looking at
+    let cost = 0;
+    if (btn.id === 'btn_buy_starter') cost = 9;
+    else if (btn.id === 'btn_buy_laugher') cost = 163;
+    else if (btn.id === 'btn_buy_crying') cost = 2781;
 
-    // 4. Crying Card (Visible: Total >= 2000 | Locked: Score < 2781)
-    if (totalEmojisGenerated >= 2000) {
-        cardCrying.classList.remove('hidden'); // Show the card
-        if (score >= 2781) {
-            cardCrying.classList.remove('locked_card');
-            btnBuyCrying.disabled = false;
-        } else {
-            cardCrying.classList.add('locked_card');
-            btnBuyCrying.disabled = true;
-        }
+    if (score >= cost) {
+        card.classList.remove('locked_card');
+        btn.disabled = false;
     } else {
-        cardCrying.classList.add('hidden'); // Hide the card
+        card.classList.add('locked_card');
+        btn.disabled = true;
     }
 }
 
 // --- Interaction: Clicking the Emoji ---
 emojiButton.addEventListener('click', (e) => {
     score = score + emojiPower;
-    totalEmojisGenerated = totalEmojisGenerated + emojiPower; // Increment total count
+    totalEmojisGenerated = totalEmojisGenerated + emojiPower;
     
     updateGame(); 
     createFloatingText(e.clientX, e.clientY);
@@ -96,7 +106,6 @@ btnBuyStarter.addEventListener('click', () => {
         score -= 9;
         emojiPower += 1; 
         updateGame();
-        console.log("Bought Starter! New power: " + emojiPower);
     }
 });
 
@@ -106,7 +115,6 @@ btnBuyLaugher.addEventListener('click', () => {
         score -= 163;
         emojiPower += 5; 
         updateGame();
-        console.log("Bought Laughing Joy! New power: " + emojiPower);
     }
 });
 
@@ -116,7 +124,6 @@ btnBuyCrying.addEventListener('click', () => {
         score -= 2781;
         emojiPower += 25; 
         updateGame();
-        console.log("Bought Crying Face! New power: " + emojiPower);
     }
 });
 
