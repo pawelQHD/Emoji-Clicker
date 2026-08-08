@@ -13,29 +13,45 @@ const cardStarter = document.getElementById('card_starter');
 const btnBuyStarter = document.getElementById('btn_buy_starter');
 
 let score = 0;
-let emojiPower = 1; // Added this so upgrades can eventually increase power
+let emojiPower = 1;
+
+// --- Function: Update UI Logic ---
+// This function handles the "Greyed Out" look and "Disabling" the button
+function updateGame() {
+    // 1. Update the score number on the screen
+    countDisplay.innerText = score;
+
+    // 2. Check if the player can afford the starter card (Cost: 9)
+    if (score >= 9) {
+        cardStarter.classList.remove('locked_card');
+        btnBuyStarter.disabled = false; // Enables the button
+    } else {
+        cardStarter.classList.add('locked_card');
+        btnBuyStarter.disabled = true;  // Disables the button
+    }
+}
 
 // --- Interaction: Clicking the Emoji ---
 emojiButton.addEventListener('click', (e) => {
     score = score + emojiPower;
-    countDisplay.innerText = score;
     
-    // This calls the function below to create the +1 text
+    // Instead of manually updating the text, we call the master function
+    updateGame(); 
+    
+    // Create the floating +1 text
     createFloatingText(e.clientX, e.clientY);
 });
 
 // --- Function: Create Floating Text ---
 function createFloatingText(x, y) {
     const text = document.createElement('span');
-    text.innerText = `+${emojiPower}`; // Displays the power you get per click
+    text.innerText = `+${emojiPower}`;
     text.classList.add('floating-text');
     text.style.left = `${x}px`;
     text.style.top = `${y}px`;
 
     document.body.appendChild(text);
 
-    // This removes the text from the HTML after the animation finishes 
-    // so your game doesn't get laggy over time.
     setTimeout(() => {
         text.remove();
     }, 800);
@@ -45,8 +61,10 @@ function createFloatingText(x, y) {
 btnBuyStarter.addEventListener('click', () => {
     if (score >= 9) {
         score -= 9;
-        emojiPower += 1; // Example: buying this makes the next click worth more!
-        countDisplay.innerText = score;
+        emojiPower += 1; 
+        
+        // Call the master function to update the score and lock status
+        updateGame();
         console.log("Bought Starter! New power: " + emojiPower);
     }
 });
@@ -65,3 +83,7 @@ tabRes.addEventListener('click', () => {
     tabRes.classList.add('active');
     tabUp.classList.remove('active');
 });
+
+// --- INITIALIZE ---
+// This runs the check once as soon as the page loads
+updateGame();
