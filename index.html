@@ -24,7 +24,7 @@
             
             <!-- Section 1: Upgrades -->
             <div id="view_up" class="shop_content">
-                <!-- Upgrade 1 -->
+                <!-- Upgrade 1 (Always Visible) -->
                 <div class="upgrade_card" id="card_starter">
                     <div class="card_icon">😊</div>
                     <div class="card_info">
@@ -34,8 +34,8 @@
                     <button id="btn_buy_starter" class="buy_button">Buy</button>
                 </div>
 
-                <!-- Upgrade 2 (NEW) -->
-                <div class="upgrade_card" id="card_laugher">
+                <!-- Upgrade 2 (Hidden until 100 total) -->
+                <div class="upgrade_card hidden" id="card_laugher">
                     <div class="card_icon">😂</div>
                     <div class="card_info">
                         <p class="card_title">Laughing Joy</p>
@@ -44,8 +44,8 @@
                     <button id="btn_buy_laugher" class="buy_button">Buy</button>
                 </div>
 
-                                <!-- Upgrade 3 (NEW) -->
-                <div class="upgrade_card" id="card_crying">
+                <!-- Upgrade 3 (Hidden until 2000 total) -->
+                <div class="upgrade_card hidden" id="card_crying">
                     <div class="card_icon">😢</div>
                     <div class="card_info">
                         <p class="card_title">Crying Face</p>
@@ -53,7 +53,7 @@
                     </div>
                     <button id="btn_buy_crying" class="buy_button">Buy</button>
                 </div>
-
+                
             </div>
 
             <!-- Section 2: Research -->
