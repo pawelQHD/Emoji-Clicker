@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Clicker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="game-layout">
+        <!-- Left Side -->
+        <div class="main-area">
+            <h1>Emojis: <span id="emoji_count">0</span></h1>
+            <div id="emoji-button">😃</div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="shop-area">
+            <div class="tabs">
+                <button id="tab_up" class="active">Upgrades</button>
+                <button id="tab_res">Research</button>
+            </div>
+            
+            <!-- Section 1: Upgrades -->
+            <div id="view_up" class="shop_content">
+                <div class="upgrade_card" id="card_starter">
+                    <div class="card_icon">😊</div>
+                    <div class="card_info">
+                        <p class="card_price">9 Emojis</p>
+                    </div>
+                    <button id="btn_buy_starter" class="buy_button">Buy</button>
+                </div>
+            </div>
+
+            <!-- Section 2: Research -->
+            <div id="view_res" class="shop_content hidden">
+                Research Content
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
