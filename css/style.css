@@ -91,9 +91,10 @@ h1 {
     padding: 10px;
     border-radius: 0;
     border: 2px solid #5d4037;
-    margin-bottom: 10px;
+    margin-bottom: 0; /* Changed from 10px to 0 to remove the gap */
     width: 100%;
 }
+
 
 /* The "Greyed Out" state */
 .locked_card {
