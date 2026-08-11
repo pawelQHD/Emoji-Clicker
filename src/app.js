@@ -1,4 +1,4 @@
-import { state, CARDS, getCardCost, getPowerGain } from './state.js';
+import { state, CARDS, getCardCost, getPowerGain, getPassiveGain } from './state.js';
 import { updateGame, createFloatingText } from './ui.js';
 
 const emojiButton = document.getElementById('emoji-button');
@@ -27,6 +27,10 @@ document.querySelectorAll('.buy_button').forEach(btn => {
       // Calculate and apply power gain
       const powerGain = getPowerGain(card);
       state.emojiPower += powerGain;
+            // Update passive rate if Laugher purchased
+            if (card.id === 'card_laugher') {
+              state.passiveRate = getPassiveGain(card);
+            }
       
       // Debug: log the upgrade info
       console.log(`Purchased ${card.id}, new level: ${newLevel}`);
@@ -57,3 +61,10 @@ tabRes.addEventListener('click', () => {
 });
 
 updateGame();   // initial render
+// Passive income loop
+setInterval(() => {
+  const delta = 1; // seconds per tick
+  state.score += state.passiveRate * delta;
+  state.totalEmojisGenerated += state.passiveRate * delta;
+  updateGame();
+}, 1000);

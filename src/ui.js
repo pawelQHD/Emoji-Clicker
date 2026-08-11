@@ -8,8 +8,12 @@ const cardEls = CARDS.map(c => ({
 }));
 
 export function updateGame() {
+  const generatingDiv = document.getElementById('generating_rate');
+  if (generatingDiv) {
+    generatingDiv.textContent = `Generating: ${state.passiveRate.toFixed(2)} E/s`;
+  }
   const countDisplay = document.getElementById('emoji_count');
-  countDisplay.textContent = state.score;
+  countDisplay.textContent = state.score.toFixed(2);
   
   // Ensure level displays are updated first
   cardEls.forEach(({ id, el }) => {
