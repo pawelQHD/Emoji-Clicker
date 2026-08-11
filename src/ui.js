@@ -1,27 +1,50 @@
-import { state, CARDS } from './state.js';
+import { state, CARDS, getCardCost, getPowerGain } from './state.js';
 
-const countDisplay = document.getElementById('emoji_count');
-const emojiButton   = document.getElementById('emoji-button');
-
-const tabUp    = document.getElementById('tab_up');
-const tabRes   = document.getElementById('tab_res');
-const viewUp   = document.getElementById('view_up');
-const viewRes  = document.getElementById('view_res');
-
-// Map cards to their DOM elements
+// Map cards to their DOM elements with live cost updates
 const cardEls = CARDS.map(c => ({
+  id: c.id,
   el:   document.getElementById(c.id),
-  btn:  document.getElementById(c.btnId),
-  cost: c.cost,
+  btn:  document.getElementById(c.btnId)
 }));
 
 export function updateGame() {
+  const countDisplay = document.getElementById('emoji_count');
   countDisplay.textContent = state.score;
-  cardEls.forEach(updateCard);
+  
+  // Ensure level displays are updated first
+  cardEls.forEach(({ id, el }) => {
+    const levelDisplay = el.querySelector('.level_display');
+    if (levelDisplay) {
+      const currentLevel = state.upgrades[id] || 0;
+      if (currentLevel >= 1) {
+        levelDisplay.textContent = `Lvl: ${currentLevel}`;
+        levelDisplay.style.display = 'block';
+      } else {
+        levelDisplay.style.display = 'none';
+      }
+    }
+  });
+  
+  // Update all card costs and visibility
+  cardEls.forEach(({ id, el, btn }) => {
+    if (id.startsWith('card_')) {
+      // Calculate new cost
+      const newCost = getCardCost(CARDS.find(c => c.id === id));
+      
+      // Update the button text to show current cost
+      btn.textContent = `${newCost} Emojis`;
+      btn.dataset.cardCost = String(newCost);
+      
+      updateCard({ id, el, btn });
+    }
+  });
 }
 
-function updateCard({ el, btn, cost }) {
-  const revealAt = CARDS.find(c => c.btnId === btn.id).revealAt;
+function updateCard({ id, el, btn }) {
+  const cardInfo = CARDS.find(c => c.id === id);
+  if (!cardInfo) return;
+  
+  const revealAt = cardInfo.revealAt;
 
   // Visibility logic
   if (state.totalEmojisGenerated < revealAt / 2) {
@@ -37,10 +60,38 @@ function updateCard({ el, btn, cost }) {
     el.classList.remove('outline-mode');
   }
 
+  // Update level display
+  const levelDisplay = el.querySelector('.card_level');
+  
+  // Show level only if we have purchased the upgrade at least once
+  const currentLevel = state.upgrades[id] || 0;
+  if (levelDisplay && currentLevel >= 1) {
+    levelDisplay.textContent = `Lvl: ${currentLevel}`;
+    levelDisplay.style.display = 'block';
+  } else if (levelDisplay) {
+    levelDisplay.style.display = 'none';
+  }
+
+  // Recalculate cost based on current level
+  const affordableCost = getCardCost(cardInfo);
+  
   // Affordability
-  const affordable = state.score >= cost;
+  const affordable = state.score >= affordableCost;
   btn.disabled   = !affordable;
   el.classList.toggle('locked_card', !affordable);
+}
+
+export function updateCardCost() {
+  // Recalculate and update card costs when needed
+  cardEls.forEach(({ el, btn }) => {
+    const cardInfo = CARDS.find(c => c.id === el.id);
+    if (!cardInfo) return;
+    const newCost = getCardCost(cardInfo);
+    if (btn.dataset.cardCost !== String(newCost)) {
+      btn.dataset.cardCost = String(newCost);
+      updateCard({ el, btn, cost: newCost });
+    }
+  });
 }
 
 export function createFloatingText(x, y) {

@@ -1,4 +1,4 @@
-import { state, CARDS } from './state.js';
+import { state, CARDS, getCardCost, getPowerGain } from './state.js';
 import { updateGame, createFloatingText } from './ui.js';
 
 const emojiButton = document.getElementById('emoji-button');
@@ -15,17 +15,23 @@ document.querySelectorAll('.buy_button').forEach(btn => {
     const card = CARDS.find(c => c.btnId === btn.id);
     if (!card) return;
 
-    let powerIncrement;
-    switch (card.revealAt) {
-      case 0:   powerIncrement = 1; break;
-      case 100: powerIncrement = 5; break;
-      case 2000: powerIncrement = 25; break;
-      default:  powerIncrement = 0;
-    }
+    const currentCost = parseInt(btn.dataset.cardCost || btn.textContent); // Get cost from button text
 
-    if (state.score >= card.cost) {
-      state.score -= card.cost;
-      state.emojiPower += powerIncrement;
+    if (state.score >= currentCost) {
+      state.score -= currentCost;
+      
+      // Increment the purchase count for this card
+      const newLevel = (state.upgrades[card.id] || 0) + 1;
+      state.upgrades[card.id] = newLevel;
+      
+      // Calculate and apply power gain
+      const powerGain = getPowerGain(card);
+      state.emojiPower += powerGain;
+      
+      // Debug: log the upgrade info
+      console.log(`Purchased ${card.id}, new level: ${newLevel}`);
+      console.log('All upgrades:', state.upgrades);
+      
       updateGame();
     }
   });

@@ -93,6 +93,10 @@ h1 {
     transition: all 0.6s ease-in-out; 
 }
 
+.locked_card .card_title {
+    display: none !important;
+}
+
 .locked_card {
     opacity: 0.6;
     filter: grayscale(100%); /* Makes it look desaturated */
@@ -135,6 +139,12 @@ h1 {
 .card_info {
     flex-grow: 1;
     text-align: left;
+}
+
+.level_display {
+    font-weight: bold;
+    color: #5d4037;
+    margin-top: 5px;
 }
 
 .hidden {
