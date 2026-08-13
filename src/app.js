@@ -10,12 +10,13 @@ emojiButton.addEventListener('click', e => {
   createFloatingText(e.clientX, e.clientY);
 });
 
-document.querySelectorAll('.buy_button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const card = CARDS.find(c => c.btnId === btn.id);
+document.querySelectorAll('.upgrade_card').forEach(cardBtn => {
+  const handlePurchase = () => {
+    const card = CARDS.find(c => c.id === cardBtn.id);
     if (!card) return;
 
-    const currentCost = parseInt(btn.dataset.cardCost || btn.textContent); // Get cost from button text
+    const priceEl = cardBtn.querySelector('.card_price');
+    const currentCost = parseInt(cardBtn.dataset.cardCost || (priceEl ? priceEl.textContent : cardBtn.textContent));
 
     if (state.score >= currentCost) {
       state.score -= currentCost;
@@ -38,7 +39,8 @@ document.querySelectorAll('.buy_button').forEach(btn => {
       
       updateGame();
     }
-  });
+  };
+  cardBtn.addEventListener('click', handlePurchase);
 });
 
 const tabUp   = document.getElementById('tab_up');
