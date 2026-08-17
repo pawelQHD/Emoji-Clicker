@@ -65,8 +65,8 @@ tabRes.addEventListener('click', () => {
 updateGame();   // initial render
 // Passive income loop
 setInterval(() => {
-  const delta = 1; // seconds per tick
+  const delta = 0.33; // seconds per tick
   state.score += state.passiveRate * delta;
   state.totalEmojisGenerated += state.passiveRate * delta;
   updateGame();
-}, 1000);
+}, 330);

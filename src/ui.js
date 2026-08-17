@@ -9,7 +9,11 @@ const cardEls = CARDS.map(c => ({
 export function updateGame() {
   const generatingDiv = document.getElementById('generating_rate');
   if (generatingDiv) {
-    generatingDiv.textContent = `Generating: ${state.passiveRate.toFixed(2)} E/s`;
+    generatingDiv.textContent = state.passiveRate.toFixed(2);
+  }
+  if(!state.hasShownGenerating && state.passiveRate > 0){
+    showGeneratingLabel();
+    state.hasShownGenerating = true;
   }
   const countDisplay = document.getElementById('emoji_count');
   if (countDisplay) {
@@ -93,3 +97,9 @@ export function createFloatingText(x, y) {
   setTimeout(() => text.remove(), 800);
 }
 
+function showGeneratingLabel(){
+  const label = document.getElementById('generating_label');
+  if(label){
+    label.classList.remove("hidden");
+  }
+}

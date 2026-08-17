@@ -18,7 +18,8 @@ export const state = {
     card_starter: 0,
     card_laugher: 0,
     card_crying: 0
-  }
+  },
+  hasShownGenerating: false
 };
 
 export function getCardCost(card) {
