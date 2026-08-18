@@ -54,7 +54,7 @@ h1 {
 
 .tabs {
     display: flex;
-    margin-bottom: 0; /* Fixed: Removed margin to sit against card */
+    margin-bottom: 0;
     border-bottom: 2px solid #5d4037;
     padding: 0;
 }
@@ -91,6 +91,7 @@ h1 {
     margin-bottom: 0;
     width: 100%;
     transition: all 0.6s ease-in-out;
+    cursor: pointer;
 }
 .upgrade_card .card_icon { order: 0; }
 
@@ -102,11 +103,9 @@ h1 {
 
 .locked_card {
     opacity: 0.6;
-    filter: grayscale(100%); /* Makes it look desaturated */
-    pointer-events: none; /* This prevents ANY clicking inside the card */
+    filter: grayscale(100%);
+    pointer-events: none;
 }
-
-/* Removed .buy_button styles as cards are now clickable divs */
 
 .card_icon {
     font-size: 2.5rem;
@@ -122,11 +121,10 @@ h1 {
 }
 .level_display {
     margin-left:auto;
-    padding-right:0px; /* small space from edge */
+    padding-right:0px;
     font-weight: bold;
     color: #5d4037;
     font-size: 45px;
-    /* No vertical margin – will be centered by flex container */
 }
 
 .hidden {
@@ -178,4 +176,60 @@ h1 {
         transform: translateY(-100px);
         opacity: 0;
     }
+}
+
+/* Card Box */
+
+.circle-btn {
+  position: fixed;
+  left: 22px;
+  bottom: 22px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #7d7d7d; /* button colour  */
+  font-size: 32px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,.3);
+  transition: transform .1s ease-in-out;
+}
+.circle-btn:hover {
+  transform: scale(1.35);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,.72); /* darken the background when cardBox is open */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal.hidden {
+  display: none;
+}
+
+/* Modal content box */
+.modal-content {
+  background: white;
+  padding: 20px 30px;
+  border-radius: 8px;
+  position: relative;
+  max-width: 90%;
+  width: 65%;
+  height: 50%;
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+}
+
+/* Close button (❌) */
+#close-modal {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
 }

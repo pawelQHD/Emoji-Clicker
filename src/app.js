@@ -1,5 +1,6 @@
 import { state, CARDS, getCardCost, getPowerGain, getPassiveGain } from './state.js';
 import { updateGame, createFloatingText } from './ui.js';
+import { setModalVisible } from './cardBox.js';
 
 const emojiButton = document.getElementById('emoji-button');
 
@@ -20,23 +21,13 @@ document.querySelectorAll('.upgrade_card').forEach(cardBtn => {
 
     if (state.score >= currentCost) {
       state.score -= currentCost;
-      
-      // Increment the purchase count for this card
       const newLevel = (state.upgrades[card.id] || 0) + 1;
       state.upgrades[card.id] = newLevel;
-      
-      // Calculate and apply power gain
       const powerGain = getPowerGain(card);
       state.emojiPower += powerGain;
-            // Update passive rate if Laugher purchased
             if (card.id === 'card_laugher') {
               state.passiveRate = getPassiveGain(card);
             }
-      
-      // Debug: log the upgrade info
-      console.log(`Purchased ${card.id}, new level: ${newLevel}`);
-      console.log('All upgrades:', state.upgrades);
-      
       updateGame();
     }
   };
@@ -62,11 +53,16 @@ tabRes.addEventListener('click', () => {
   tabUp.classList.remove('active');
 });
 
-updateGame();   // initial render
-// Passive income loop
+updateGame();
+
 setInterval(() => {
   const delta = 0.33; // seconds per tick
   state.score += state.passiveRate * delta;
   state.totalEmojisGenerated += state.passiveRate * delta;
   updateGame();
 }, 330);
+
+document.addEventListener('DOMContentLoaded', () => {
+  setModalVisible(visible); 
+  updateGame();
+});

@@ -9,7 +9,7 @@
 <body>
 
     <div class="game-layout">
-        <!-- Left Side -->
+        <!-- Left Side (Main game window) -->
         <div class="main-area">
             <h1>Emojis: <span id="emoji_count">0</span></h1>
             <h2 id="generating_label" class="hidden">
@@ -18,11 +18,11 @@
             <div id="emoji-button">🌳</div>
         </div>
 
-        <!-- Right Side -->
+        <!-- Right Side (Upgrades window) -->
         <div class="shop-area">
             <div class="tabs">
-                <button id="tab_up" class="active">Upgrades</button>
-                <button id="tab_res">Research</button>
+                <button id="tab_up" class="active">🏭 Buildings</button>
+                <button id="tab_res">🃏 Cards</button>
             </div>
 
             <!-- Section 1: Upgrades -->
@@ -59,6 +59,16 @@
             <!-- Section 2: Research -->
             <div id="view_res" class="shop_content hidden">
                 Research Content
+            </div>
+        </div>
+        
+        <!-- CardBox button -->
+        <button id="open-modal" class="circle-btn" aria-label="Open menu">📦</button>
+        <div id="modal-overlay" class="modal hidden">
+            <div class="modal-content">
+                <button id="close-modal" aria-label="Close menu">❌</button>
+                    <!-- Cards go here -->
+                <p>Custom modal text placeholder</p>
             </div>
         </div>
     </div>

@@ -1,6 +1,5 @@
 import { state, CARDS, getCardCost } from './state.js';
 
-// Map cards to their DOM elements with live cost updates
 const cardEls = CARDS.map(c => ({
   id: c.id,
   el: document.getElementById(c.id),
@@ -20,7 +19,6 @@ export function updateGame() {
     countDisplay.textContent = state.score.toFixed(2);
   }
 
-  // Update all card costs and visibility
   cardEls.forEach(({ id, el }) => {
     if (!el) return;
     const cardInfo = CARDS.find(c => c.id === id);
@@ -30,7 +28,6 @@ export function updateGame() {
     if (priceEl) {
       priceEl.textContent = `${newCost}`;
     }
-    // Store cost for later use
     el.dataset.cardCost = String(newCost);
     updateCard({ id, el });
   });
@@ -42,7 +39,6 @@ function updateCard({ id, el }) {
 
   const revealAt = cardInfo.revealAt;
 
-  // Visibility logic
   if (state.totalEmojisGenerated < revealAt / 2) {
     el.classList.add('hidden');
     el.classList.remove('outline-mode', 'revealed-mode');
@@ -56,7 +52,6 @@ function updateCard({ id, el }) {
     el.classList.remove('outline-mode');
   }
 
-  // Update level display
   const levelDisplay = el.querySelector('.level_display');
   if (levelDisplay) {
     const currentLevel = state.upgrades[id] || 0;
@@ -68,7 +63,6 @@ function updateCard({ id, el }) {
     }
   }
 
-  // Affordability
   const affordableCost = getCardCost(cardInfo);
   const affordable = state.score >= affordableCost;
   el.classList.toggle('locked_card', !affordable);
